@@ -1,25 +1,18 @@
-# 🔐 AWS VPC Endpoints: Locking Down S3 Access  
+# 🔒 AWS VPC Endpoints: Securing S3 Access
 
-**Goal:** Restrict S3 bucket access to ONLY my VPC using Gateway Endpoints—no internet randoms allowed.  
+## Project Overview
+Used **VPC Gateway Endpoints** to enforce private S3 access, blocking all public traffic.  
 
-## 📸 Proof  
-Screenshots in [`/diagrams`](diagrams/):  
-- [VPC Endpoint Config](diagrams/vpc-config.png)  
-- ["Access Denied" Error](diagrams/error.png) *(before fix)*   
+## Key Components
+- **VPC Endpoint** (Gateway type for S3)  
+- **Bucket Policy** with `Deny` rules  
+- **Route Table** updates  
 
-## 🛠️ How It Works  
-1. **Created a VPC Endpoint** (like a private tunnel to S3).  
-2. **Wrote a Bucket Policy** to block all traffic except from my VPC.  
-3. **Tested It:**  
-   - ✅ EC2 in my VPC could access S3.  
-   - ❌ External requests got denied.  
+## Documentation
+- **Screenshots:** See `/diagrams` folder for setup visuals.  
+- **Detailed steps:** [`vpc-endpoints-guide.pdf`](vpc-endpoints-guide.pdf) *(attached separately)*  
 
-## 💡 Lessons Learned  
-- **Route Tables Matter:** Forgot to update them at first—total fail.  
-- **Least Privilege:** Bucket policies are bouncers for your data.  
-- **AWS is Picky:** Hyphens vs. underscores in filenames break things.  
-
-## 🚀 Try It Yourself  
+## Quick Command
 ```bash
-# Command I used to test access:
-aws s3 ls s3://my-bucket --endpoint-url https://vpce-12345.s3.us-east-1.vpce.amazonaws.com
+# Test endpoint access:
+aws s3 ls s3://your-bucket --endpoint-url https://vpce-12345.s3.us-east-1.vpce.amazonaws.com
